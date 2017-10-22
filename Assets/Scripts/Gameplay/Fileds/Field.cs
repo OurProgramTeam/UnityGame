@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace Scripts.Mechanics
+namespace Scripts.Gameplay.Fields
 {
     public class Field : MonoBehaviour
     {

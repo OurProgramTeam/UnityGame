@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts
+namespace Scripts.Gameplay
 {
-    public enum Position
+    public enum Orientation
     {
         X,
         Y,

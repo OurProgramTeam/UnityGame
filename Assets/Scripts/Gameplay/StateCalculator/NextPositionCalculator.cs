@@ -1,21 +1,22 @@
-﻿using System;
+﻿using Scripts.Gameplay.Fields;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Scripts.Mechanics
+namespace Scripts.Gameplay.StateCalculator
 {
-    public class FlipCalculator
+    public class NextPositionCalculator
     {
-        public List<Field> CalculateCurrentFieldsAfterFlip(List<Field> fields, List<Field> currentFields, Position position, Direct direct)
+        public List<Field> Calculate(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
         {
             List<Field> newCurrentFields = new List<Field>();
-            switch (position)
+            switch (orientation)
             {
-                case Position.X:
+                case Orientation.X:
                     return GetCurrentAfterFlipFromX(fields, currentFields, direct);
-                case Position.Y:
+                case Orientation.Y:
                     return GetCurrentAfterFlipFromY(fields, currentFields, direct);
-                case Position.Z:
+                case Orientation.Z:
                     return GetCurrentAfterFlipFromZ(fields, currentFields, direct);
                 default:
                     throw new Exception("undefined current position");
@@ -100,22 +101,6 @@ namespace Scripts.Mechanics
                     break;
             }
             return newCurrentFields;
-        }
-
-        private void MoveFromEachField(List<Field> fields)
-        {
-            foreach (var field in fields)
-            {
-                field.MoveFrom();
-            }
-        }
-
-        private void MoveOnEachField(List<Field> fields)
-        {
-            foreach (var field in fields)
-            {
-                field.MoveOn();
-            }
         }
     }
 }
