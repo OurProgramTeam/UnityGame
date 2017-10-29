@@ -5,9 +5,9 @@ namespace Scripts.Gameplay.StateCalculator
 {
     public interface ICurrentStateCalculator
     {
-        bool CalculateCanMoveOnDirect(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct);
+        bool CalculateCanFlip(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct);
 
-        List<Field> CalculateNextPosition(
+        List<Field> CalculateTargetPosition(
             List<Field> fields,
             List<Field> currentFields,
             Orientation orientation,

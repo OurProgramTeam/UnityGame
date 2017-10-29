@@ -1,31 +1,35 @@
 ﻿using Scripts.Gameplay.Fields;
 using Scripts.Gameplay.Flip;
 using Scripts.Gameplay.StateCalculator;
+using System;
 using UnityEngine;
 
 namespace Scripts.Gameplay
 {
     public class GameplayController : MonoBehaviour
     {
-        Transform _block;
         GameMap _gameMap;
 
         IFlipBehavior _flipBehavior;
         ICurrentStateCalculator _currentStateCalculator;
         IFieldsService _fieldsService;
+        IAnimationTimer _animationTimer;
 
         #region MonoBehavior members
         private void Start()
         {
             _currentStateCalculator = new CurrentStateCalculator();
-            _fieldsService = new FieldsService();
+            _fieldsService = GetComponent<FieldsService>();
+            _animationTimer = GetComponent<AnimationTimer>();
 
-            _block = GetComponent<Transform>();
-            _gameMap = new GameMap();
-            _gameMap.Fields = _fieldsService.GetFields();
+            _gameMap = new GameMap()
+            {
+                Fields = _fieldsService.GetFields()
+            };
 
+            _flipBehavior = GetComponent<FlipBehavior>();
             Orientation currentOrientation = _currentStateCalculator.CalculateOrientaion(_gameMap.CurrentFields);
-            _flipBehavior = new FlipBehavior(currentOrientation);
+            _flipBehavior.Init(currentOrientation);
         }
 
         private void Update()
@@ -57,21 +61,27 @@ namespace Scripts.Gameplay
         private void FlipIfAllow(Direct direct)
         {
             var currentOrientaion = _currentStateCalculator.CalculateOrientaion(_gameMap.CurrentFields);
-            if (_currentStateCalculator.CalculateCanMoveOnDirect(
+            bool canFlip = _currentStateCalculator.CalculateCanFlip(
                 _gameMap.Fields,
                 _gameMap.CurrentFields,
                 currentOrientaion,
-                direct))
-            {
-                _flipBehavior.Flip(_block, direct);
+                direct
+            ) && !_animationTimer.IsOnAnimation;
 
-                var positionToMove = _currentStateCalculator.CalculateNextPosition(
-                    _gameMap.Fields,
-                    _gameMap.CurrentFields,
-                    currentOrientaion,
-                    direct);
-                _gameMap.Flip(positionToMove);
+            if (!canFlip)
+            {
+                return;
             }
+
+            _flipBehavior.Flip(direct);
+            _animationTimer.StartAnimation();
+
+            var targetPosition = _currentStateCalculator.CalculateTargetPosition(
+                _gameMap.Fields,
+                _gameMap.CurrentFields,
+                currentOrientaion,
+                direct);
+            _gameMap.Flip(targetPosition);
         }
     }
 }

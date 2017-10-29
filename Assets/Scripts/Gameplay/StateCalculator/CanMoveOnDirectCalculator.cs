@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Scripts.Gameplay.StateCalculator
 {
-    public class CanMoveOnDirectCalculator
+    public class CanMoveOnDirectCalculator : ICanMoveOnDirectCalculator
     {
         public bool CanMoveOnDirect(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
         {

@@ -7,45 +7,30 @@ namespace Scripts.Gameplay.StateCalculator
 {
     public class CurrentStateCalculator : ICurrentStateCalculator
     {
-        private readonly CanMoveOnDirectCalculator _canMoveOnDirectCalculator;
-        private readonly NextPositionCalculator _nextPositionCalculator;
+        private readonly ICanMoveOnDirectCalculator _canMoveOnDirectCalculator;
+        private readonly INextPositionCalculator _nextPositionCalculator;
+        private readonly IOrientaionCalculator _orientaionCalculator;
 
         public CurrentStateCalculator()
         {
             _canMoveOnDirectCalculator = new CanMoveOnDirectCalculator();
             _nextPositionCalculator = new NextPositionCalculator();
+            _orientaionCalculator = new OrientaionCalculator();
         }
 
-        public bool CalculateCanMoveOnDirect(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
+        public bool CalculateCanFlip(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
         {
             return _canMoveOnDirectCalculator.CanMoveOnDirect(fields, currentFields, orientation, direct);
         }
 
-        public List<Field> CalculateNextPosition(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
+        public List<Field> CalculateTargetPosition(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
         {
             return _nextPositionCalculator.Calculate(fields, currentFields, orientation, direct);
         }
 
         public Orientation CalculateOrientaion(List<Field> currentFields)
         {
-            if (currentFields.Count < 1 || currentFields.Count > 2)
-            {
-                throw new System.Exception(String.Format("current fields count is {0}", currentFields.Count));
-            }
-
-            if (currentFields.Count == 1)
-            {
-                return Orientation.Y;
-            }
-            if (currentFields[0].Row == currentFields[1].Row)
-            {
-                return Orientation.X;
-            }
-            if (currentFields[0].Col == currentFields[1].Col)
-            {
-                return Orientation.Z;
-            }
-            throw new Exception("Undefined current fields position");
+            return _orientaionCalculator.CalculateOrientaion(currentFields);
         }
     }
 }

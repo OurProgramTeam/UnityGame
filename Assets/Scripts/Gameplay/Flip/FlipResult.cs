@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Scripts.Gameplay.Flip.FromDirectFactories
+namespace Scripts.Gameplay.Flip
 {
     public class FlipResult
     {

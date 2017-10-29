@@ -1,23 +1,61 @@
 ﻿using Scripts.Gameplay.Flip.FromDirectFactories;
+using Scripts.Gameplay.Flip.Transformations;
 using System;
 using UnityEngine;
 
 namespace Scripts.Gameplay.Flip
 {
-    public class FlipBehavior : IFlipBehavior
+    public class FlipBehavior : MonoBehaviour, IFlipBehavior
     {
         private const float DeltaAngle = 90f;
 
+        private IAnimationTimer _animationTimer;
+        private Transform _block;
+
+        private Transformation Transformation { get; set; }
+
         private IFromDirectAbstractFactory FromDirectFactory { get; set; }
 
-        public FlipBehavior(Orientation orientation)
+        #region MonoBehaviour members
+
+        private void Start()
         {
-            SetCurrentFlipState(orientation);
+            _animationTimer = GetComponent<AnimationTimer>();
+            _block = GetComponent<Transform>();
+            Transformation = new Transformation
+            {
+                Source = new TransfromComponents(_block),
+                Target = new TransfromComponents(_block)
+            };
         }
+
+        private void Update()
+        {
+            if (_animationTimer.IsOnAnimation)
+            {
+                _block.SetPositionAndRotation(Transformation.Source.Position, Transformation.Source.Rotation);
+                _block.RotateAround(
+                    _block.position + Transformation.DeltaPoint, 
+                    Transformation.Axis,
+                    DeltaAngle * _animationTimer.ElapsedPart
+                );
+            }
+            else
+            {
+                _block.SetPositionAndRotation(Transformation.Target.Position, Transformation.Target.Rotation);
+            }
+        }
+
+        #endregion
 
         #region IFlipBehavior members
 
-        public Orientation Flip(Transform transform, Direct direct)
+        public void Init(Orientation blockOrientation)
+        {
+            SetCurrentFlipState(blockOrientation);
+        }
+
+        public Orientation Flip(Direct direct)
         {
             var flipResult = new FlipResult();
             var axis = new Vector3();
@@ -26,19 +64,19 @@ namespace Scripts.Gameplay.Flip
             {
                 case Direct.Down:
                     axis = new Vector3(-1f, 0f, 0f);
-                    flipResult = FromDirectFactory.FlipDown(transform);
+                    flipResult = FromDirectFactory.FlipDown(_block);
                     break;
                 case Direct.Up:
                     axis = new Vector3(1f, 0f, 0f);
-                    flipResult = FromDirectFactory.FlipUp(transform);
+                    flipResult = FromDirectFactory.FlipUp(_block);
                     break;
                 case Direct.Left:
                     axis = new Vector3(0f, 0f, 1f);
-                    flipResult = FromDirectFactory.FlipLeft(transform);
+                    flipResult = FromDirectFactory.FlipLeft(_block);
                     break;
                 case Direct.Right:
                     axis = new Vector3(0f, 0f, -1f);
-                    flipResult = FromDirectFactory.FlipRight(transform);
+                    flipResult = FromDirectFactory.FlipRight(_block);
                     break;
                 default:
                     throw new Exception("unknown direct");
@@ -46,14 +84,14 @@ namespace Scripts.Gameplay.Flip
 
             SetCurrentFlipState(flipResult.Orientation);
 
-            RotateAround(transform, flipResult.DeltaPoint, axis);
+            SetTransformation(flipResult.DeltaPoint, axis);
 
             return flipResult.Orientation;
         }
 
         #endregion
 
-        private void SetCurrentFlipState( Orientation orientation )
+        private void SetCurrentFlipState(Orientation orientation)
         {
             switch (orientation)
             {
@@ -71,13 +109,19 @@ namespace Scripts.Gameplay.Flip
             }
         }
 
-        private void RotateAround(Transform transform, Vector3 deltaPoint, Vector3 axis)
+        private void SetTransformation(Vector3 deltaPoint, Vector3 axis)
         {
-            transform.RotateAround(
-                transform.position + deltaPoint,
-                axis,
-                DeltaAngle
-            );
+            Transformation.Axis = axis;
+            Transformation.DeltaPoint = deltaPoint;
+
+            Transformation.Source = new TransfromComponents(_block);
+
+            _block.RotateAround(_block.position + deltaPoint, axis, DeltaAngle );
+
+            Transformation.Target = new TransfromComponents(_block);
+
+            //_block.RotateAround(_block.position - deltaPoint, axis * -1, -DeltaAngle);
+            _block.SetPositionAndRotation(Transformation.Source.Position, Transformation.Source.Rotation);
         }
     }
 }

@@ -5,11 +5,10 @@ using System.Linq;
 
 namespace Scripts.Gameplay.StateCalculator
 {
-    public class NextPositionCalculator
+    public class NextPositionCalculator : INextPositionCalculator
     {
         public List<Field> Calculate(List<Field> fields, List<Field> currentFields, Orientation orientation, Direct direct)
         {
-            List<Field> newCurrentFields = new List<Field>();
             switch (orientation)
             {
                 case Orientation.X:
