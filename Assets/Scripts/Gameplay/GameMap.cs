@@ -8,6 +8,14 @@ namespace Scripts.Gameplay
     {
         public List<Field> Fields { get; set; }
 
+        public bool IsWin
+        {
+            get
+            {
+                return CurrentFields.All(f => f.IsOk);
+            }
+        }
+
         public List<Field> CurrentFields
         {
             get

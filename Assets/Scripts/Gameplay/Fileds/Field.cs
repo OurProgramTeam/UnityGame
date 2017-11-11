@@ -46,9 +46,12 @@ namespace Scripts.Gameplay.Fields
         }
         #endregion
 
-        public bool GetIsOk()
+        public bool IsOk
         {
-            return _isCurrent == _isEnd;
+            get
+            {
+                return _isCurrent == _isEnd;
+            }
         }
 
         public void MoveOn()

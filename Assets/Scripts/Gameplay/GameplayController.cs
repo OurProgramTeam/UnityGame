@@ -1,6 +1,7 @@
 ﻿using Scripts.Gameplay.Fields;
 using Scripts.Gameplay.Flip;
 using Scripts.Gameplay.StateCalculator;
+using Scripts.Levels;
 using System;
 using UnityEngine;
 
@@ -10,10 +11,12 @@ namespace Scripts.Gameplay
     {
         GameMap _gameMap;
 
+        IMenuService _menuService;
         IFlipBehavior _flipBehavior;
         ICurrentStateCalculator _currentStateCalculator;
         IFieldsService _fieldsService;
         IAnimationTimer _animationTimer;
+        IGameProgress _gameProgress;
 
         #region MonoBehavior members
         private void Start()
@@ -30,11 +33,31 @@ namespace Scripts.Gameplay
             _flipBehavior = GetComponent<FlipBehavior>();
             Orientation currentOrientation = _currentStateCalculator.CalculateOrientaion(_gameMap.CurrentFields);
             _flipBehavior.Init(currentOrientation);
+
+            _gameProgress = GetComponent<GameProgress>();
+            _gameProgress.SetCurrentLevel();
+
+            _menuService = GetComponent<MenuService>();
         }
 
         private void Update()
         {
-            OnKeyUp();
+            if (!_animationTimer.IsOnAnimation && _gameMap.IsWin)
+            {
+                if (_gameProgress.CanPlay)
+                {
+                    _gameProgress.SetNextLevel();
+                    _gameProgress.LoadLevel();
+                }
+                else
+                {
+                    _menuService.GoToMenu();
+                }
+            }
+            else
+            {
+                OnKeyUp();
+            }
         }
         #endregion
 
