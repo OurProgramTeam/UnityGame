@@ -68,13 +68,13 @@ namespace Scripts.Gameplay.StateCalculator
             {
                 return true;
             }
-            if (direct == Direct.Left && fields.Any(f => f.Row == field.Col - 1 && f.Col == field.Row)
-                && fields.Any(f => f.Row == field.Col - 2 && f.Col == field.Row))
+            if (direct == Direct.Left && fields.Any(f => f.Col == field.Col - 1 && f.Row == field.Row)
+                && fields.Any(f => f.Col == field.Col - 2 && f.Row == field.Row))
             {
                 return true;
             }
-            if (direct == Direct.Right && fields.Any(f => f.Row == field.Col + 1 && f.Col == field.Row)
-                && fields.Any(f => f.Row == field.Col + 2 && f.Col == field.Row))
+            if (direct == Direct.Right && fields.Any(f => f.Col == field.Col + 1 && f.Row == field.Row)
+                && fields.Any(f => f.Col == field.Col + 2 && f.Row == field.Row))
             {
                 return true;
             }
