@@ -1,6 +1,7 @@
 ﻿using Scripts.Gameplay.Fields;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Scripts.Gameplay
 {
@@ -12,7 +13,7 @@ namespace Scripts.Gameplay
         {
             get
             {
-                return CurrentFields.All(f => f.IsOk);
+                return EndFields.All(f => f.IsOk) && CurrentFields.All(f => f.IsOk);
             }
         }
 
@@ -22,6 +23,16 @@ namespace Scripts.Gameplay
             {
                 return Fields
                     .Where(f => f.IsCurrent)
+                    .ToList();
+            }
+        }
+
+        public List<Field> EndFields
+        {
+            get
+            {
+                return Fields
+                    .Where(f => f.IsEnd)
                     .ToList();
             }
         }

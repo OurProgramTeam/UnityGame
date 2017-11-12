@@ -25,6 +25,14 @@ namespace Scripts.Gameplay.Fields
             }
         }
 
+        public bool IsEnd
+        {
+            get
+            {
+                return _isEnd;
+            }
+        }
+
         #region MonoBehavior Members
         private void Awake()
         {
