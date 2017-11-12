@@ -3,32 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Scripts
 {
     public class Menu : MonoBehaviour
     {
         private IGameProgress _gameProgress;
-
+        private GameObject _continueButton;
+        
         #region MonoBehaviour members
 
         private void Start()
         {
             _gameProgress = GetComponent<GameProgress>();
+            SetContinueButtonState();
         }
-        
+
         #endregion
 
-        // TODO переименовать NewGame
-        // Меняем кнопку на "Новая игра"
-        public void StartGame()
+        public void NewGame()
         {
             _gameProgress.NewGame();
         }
 
-        // TODO тут делаем кнопку продолжить игру
-        // Создаем кнопку продолжить
-        // Потом дизабли ее если не _gameProgress.CanPlay
         public void ContinueGame()
         {
             if (_gameProgress.CanPlay)
@@ -40,6 +38,17 @@ namespace Scripts
         public void Exit()
         {
             Application.Quit();
+        }
+
+        private void SetContinueButtonState()
+        {
+            _continueButton = GameObject.Find("ContinueGameButton");
+            _continueButton.GetComponent<Button>().interactable = false;
+
+            if (_gameProgress.CanPlay)
+            {
+                _continueButton.GetComponent<Button>().interactable = true;
+            }
         }
     }
 }
