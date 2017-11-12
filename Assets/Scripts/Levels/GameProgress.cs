@@ -33,7 +33,6 @@ namespace Scripts.Levels
         {
             if (LastPlayingLevel < Level.End)
             {
-                Debug.Log(LastPlayingLevel);
                 LastPlayingLevel = LastPlayingLevel + 1;
             }
         }

@@ -10,13 +10,13 @@ namespace Scripts
     public class Menu : MonoBehaviour
     {
         private IGameProgress _gameProgress;
-        private GameObject _continueButton;
         
         #region MonoBehaviour members
 
         private void Start()
         {
             _gameProgress = GetComponent<GameProgress>();
+
             SetContinueButtonState();
         }
 
@@ -42,12 +42,15 @@ namespace Scripts
 
         private void SetContinueButtonState()
         {
-            _continueButton = GameObject.Find("ContinueGameButton");
-            _continueButton.GetComponent<Button>().interactable = false;
+            var continueButton = GameObject.Find("ContinueGameButton").GetComponent<Button>();
 
             if (_gameProgress.CanPlay)
             {
-                _continueButton.GetComponent<Button>().interactable = true;
+                continueButton.interactable = true;
+            }
+            else
+            {
+                continueButton.interactable = false;
             }
         }
     }
