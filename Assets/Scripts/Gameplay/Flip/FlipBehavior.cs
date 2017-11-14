@@ -120,7 +120,6 @@ namespace Scripts.Gameplay.Flip
 
             Transformation.Target = new TransfromComponents(_block);
 
-            //_block.RotateAround(_block.position - deltaPoint, axis * -1, -DeltaAngle);
             _block.SetPositionAndRotation(Transformation.Source.Position, Transformation.Source.Rotation);
         }
     }
