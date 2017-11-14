@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using Scripts.Utils;
 
 namespace Scripts.Gameplay.Flip.Transformations
 {
@@ -12,17 +13,16 @@ namespace Scripts.Gameplay.Flip.Transformations
         {
             var srcPosition = transfrom.position;
             Position = new Vector3(
-                Round(srcPosition.x),
-                Round(srcPosition.y),
-                Round(srcPosition.z)
+                NumberUtils.RoundByDigitsCount(srcPosition.x, 2),
+                NumberUtils.RoundByDigitsCount(srcPosition.y, 2),
+                NumberUtils.RoundByDigitsCount(srcPosition.z, 2)
             );
 
-            var srcRotation = transfrom.rotation;
-            Rotation = new Quaternion(
-                Round(srcRotation.x),
-                Round(srcRotation.y),
-                Round(srcRotation.z),
-                Round(srcRotation.w)
+            var srcRotation = transfrom.rotation.eulerAngles;
+            Rotation = Quaternion.Euler(
+                NumberUtils.RoundByStep(srcRotation.x, 90f),
+                NumberUtils.RoundByStep(srcRotation.y, 90f),
+                NumberUtils.RoundByStep(srcRotation.z, 90f)
             );
         }
 
