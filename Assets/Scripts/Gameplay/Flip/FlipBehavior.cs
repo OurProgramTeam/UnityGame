@@ -11,6 +11,7 @@ namespace Scripts.Gameplay.Flip
 
         private IAnimationTimer _animationTimer;
         private Transform _block;
+        private IFlipSoundManager _flipSoundManager;
 
         private Transformation Transformation { get; set; }
 
@@ -20,6 +21,8 @@ namespace Scripts.Gameplay.Flip
 
         private void Start()
         {
+            _flipSoundManager = GetComponent<FlipSoundManager>();
+
             _animationTimer = GetComponent<AnimationTimer>();
             _block = GetComponent<Transform>();
             Transformation = new Transformation
@@ -85,6 +88,8 @@ namespace Scripts.Gameplay.Flip
             SetCurrentFlipState(flipResult.Orientation);
 
             SetTransformation(flipResult.DeltaPoint, axis);
+
+            _flipSoundManager.Play();
 
             return flipResult.Orientation;
         }
