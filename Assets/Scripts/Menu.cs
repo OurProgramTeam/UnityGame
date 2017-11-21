@@ -38,19 +38,16 @@ namespace Scripts
         public void Exit()
         {
             Application.Quit();
+            PlayerPrefs.DeleteAll();
         }
 
         private void SetContinueButtonState()
         {
             var continueButton = GameObject.Find("ContinueGameButton").GetComponent<Button>();
-
+            continueButton.interactable = false;
             if (_gameProgress.CanPlay)
             {
                 continueButton.interactable = true;
-            }
-            else
-            {
-                continueButton.interactable = false;
             }
         }
     }
