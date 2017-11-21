@@ -14,7 +14,6 @@ namespace Scripts.Gameplay
         IMenuService _menuService;
         IFlipBehavior _flipBehavior;
         ICurrentStateCalculator _currentStateCalculator;
-        IFieldsService _fieldsService;
         IAnimationTimer _animationTimer;
         IGameProgress _gameProgress;
 
@@ -22,13 +21,9 @@ namespace Scripts.Gameplay
         private void Start()
         {
             _currentStateCalculator = new CurrentStateCalculator();
-            _fieldsService = GetComponent<FieldsService>();
             _animationTimer = GetComponent<AnimationTimer>();
 
-            _gameMap = new GameMap()
-            {
-                Fields = _fieldsService.GetFields()
-            };
+            _gameMap = GetComponent<GameMap>();
 
             _flipBehavior = GetComponent<FlipBehavior>();
             Orientation currentOrientation = _currentStateCalculator.CalculateOrientaion(_gameMap.CurrentFields);

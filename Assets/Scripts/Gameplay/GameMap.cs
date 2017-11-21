@@ -5,9 +5,19 @@ using UnityEngine;
 
 namespace Scripts.Gameplay
 {
-    public class GameMap
+    public class GameMap : MonoBehaviour
     {
         public List<Field> Fields { get; set; }
+
+        #region MonoBehaviour members
+
+        private void Awake()
+        {
+            IFieldsService fieldsService = GetComponent<FieldsService>();
+            Fields = fieldsService.GetFields();
+        }
+
+        #endregion
 
         public bool IsWin
         {
