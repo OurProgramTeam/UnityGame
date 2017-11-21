@@ -1,8 +1,8 @@
-﻿using Scripts.Gameplay.Fields;
+﻿using Scripts.Gameplay.Animations;
 using Scripts.Gameplay.Flip;
 using Scripts.Gameplay.StateCalculator;
 using Scripts.Levels;
-using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Scripts.Gameplay
@@ -14,14 +14,15 @@ namespace Scripts.Gameplay
         IMenuService _menuService;
         IFlipBehavior _flipBehavior;
         ICurrentStateCalculator _currentStateCalculator;
-        IAnimationTimer _animationTimer;
+        IBlockAnimation _blockAnimation;
         IGameProgress _gameProgress;
+        IAnimationObservable _animationObservable;
 
         #region MonoBehavior members
         private void Start()
         {
             _currentStateCalculator = new CurrentStateCalculator();
-            _animationTimer = GetComponent<AnimationTimer>();
+            _blockAnimation = GetComponent<IBlockAnimation>();
 
             _gameMap = GetComponent<GameMap>();
 
@@ -33,11 +34,13 @@ namespace Scripts.Gameplay
             _gameProgress.SetCurrentLevel();
 
             _menuService = GetComponent<MenuService>();
+
+            _animationObservable = FindObjectsOfType<AnimationObservable>().Single();
         }
 
         private void Update()
         {
-            if (!_animationTimer.IsOnAnimation && _gameMap.IsWin)
+            if (_animationObservable.IsAllEnd && _gameMap.IsWin)
             {
                 if (_gameProgress.CanPlay)
                 {
@@ -84,7 +87,7 @@ namespace Scripts.Gameplay
                 _gameMap.CurrentFields,
                 currentOrientaion,
                 direct
-            ) && !_animationTimer.IsOnAnimation;
+            ) && !_blockAnimation.IsOnAnimation;
 
             if (!canFlip)
             {
@@ -92,7 +95,7 @@ namespace Scripts.Gameplay
             }
 
             _flipBehavior.Flip(direct);
-            _animationTimer.StartAnimation();
+            _blockAnimation.StartAnimation();
 
             var targetPosition = _currentStateCalculator.CalculateTargetPosition(
                 _gameMap.Fields,

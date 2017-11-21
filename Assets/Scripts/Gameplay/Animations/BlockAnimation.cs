@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Scripts.Gameplay
+namespace Scripts.Gameplay.Animations
 {
-    public class AnimationTimer : MonoBehaviour, IAnimationTimer
+    public class BlockAnimation : MonoBehaviour, IBlockAnimation
     {
         [SerializeField]
         private float _animationTime;
@@ -11,7 +10,9 @@ namespace Scripts.Gameplay
         private float ElapsedTime { get; set; }
         private bool _isOnAimation;
 
-        #region IAnimationTimer members
+        private IAnimationObservable _animationObservable;
+
+        #region IBlockAnimation members
 
         public bool IsOnAnimation
         {
@@ -33,6 +34,22 @@ namespace Scripts.Gameplay
             }
         }
 
+        public bool IsStart
+        {
+            get
+            {
+                return ElapsedPart <= 0f;
+            }
+        }
+
+        public bool IsEnd
+        {
+            get
+            {
+                return ElapsedPart >= 1f;
+            }
+        }
+
         public void StartAnimation()
         {
             _isOnAimation = true;
@@ -46,6 +63,9 @@ namespace Scripts.Gameplay
         {
             _isOnAimation = false;
             ElapsedTime = 0f;
+
+            _animationObservable = FindObjectOfType<AnimationObservable>();
+            _animationObservable.Register(this);
         }
 
         private void Update()
