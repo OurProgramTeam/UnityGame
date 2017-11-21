@@ -2,6 +2,7 @@
 using Scripts.Gameplay.Flip.Transformations;
 using System;
 using UnityEngine;
+using Scripts.Gameplay.Animations;
 
 namespace Scripts.Gameplay.Flip
 {
@@ -9,7 +10,7 @@ namespace Scripts.Gameplay.Flip
     {
         private const float DeltaAngle = 90f;
 
-        private IAnimationTimer _animationTimer;
+        private IBlockAnimation _blockAnimation;
         private Transform _block;
 
         private Transformation Transformation { get; set; }
@@ -20,7 +21,7 @@ namespace Scripts.Gameplay.Flip
 
         private void Start()
         {
-            _animationTimer = GetComponent<AnimationTimer>();
+            _blockAnimation = GetComponent<BlockAnimation>();
             _block = GetComponent<Transform>();
             Transformation = new Transformation
             {
@@ -31,13 +32,13 @@ namespace Scripts.Gameplay.Flip
 
         private void Update()
         {
-            if (_animationTimer.IsOnAnimation)
+            if (_blockAnimation.IsOnAnimation)
             {
                 _block.SetPositionAndRotation(Transformation.Source.Position, Transformation.Source.Rotation);
                 _block.RotateAround(
                     _block.position + Transformation.DeltaPoint, 
                     Transformation.Axis,
-                    DeltaAngle * _animationTimer.ElapsedPart
+                    DeltaAngle * _blockAnimation.ElapsedPart
                 );
             }
             else
