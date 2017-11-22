@@ -38,7 +38,7 @@ namespace Scripts.Gameplay.Animations
         {
             get
             {
-                return ElapsedPart <= 0f;
+                return IsOnAnimation;
             }
         }
 
@@ -46,7 +46,7 @@ namespace Scripts.Gameplay.Animations
         {
             get
             {
-                return ElapsedPart >= 1f;
+                return !IsOnAnimation;
             }
         }
 
