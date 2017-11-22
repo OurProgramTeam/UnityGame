@@ -47,7 +47,7 @@ namespace Scripts.Gameplay.Animations
             IsStart = false;
             IsEnd = false;
             _elapsedTime = 0f;
-            _speed = (_yEndPosition - transform.position.y) / _animationTime;
+            _speed = (transform.position.y - _yEndPosition) / _animationTime;
 
             _animationObservable = FindObjectOfType<AnimationObservable>();
             _animationObservable.Register(this);
