@@ -6,16 +6,9 @@ namespace Scripts.Gameplay.Animations
 {
     public class AnimationObservable : MonoBehaviour, IAnimationObservable
     {
-        private List<IAnimation> _observers;
+        private List<IAnimation> _observers = new List<IAnimation>();
 
         #region MonoBehaviour members
-
-        // Use this for initialization
-        void Start()
-        {
-            _observers = new List<IAnimation>();
-        }
-
         #endregion
 
         #region IAnimationObservable members
