@@ -10,6 +10,7 @@
         Level5 = 5,
         Level6 = 6,
         Level7 = 7,
-        End = 8
+        Last = 8,
+        End = 9
     }
 }
